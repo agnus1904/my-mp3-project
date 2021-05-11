@@ -1,9 +1,8 @@
 import { Box } from '@material-ui/core';
 import SideBar from 'components/SideBar';
 import React from 'react';
-import musicApi from 'api/musicApi';
 import {useAppDispatch} from 'app/hooks'
-import { setSuccess, setWaiting } from 'app/slices/progressSlice';
+import { setSuccess } from 'app/slices/progressSlice';
 import { setOpen } from 'app/slices/controlSlice';
 import axios from 'axios';
 
@@ -11,9 +10,8 @@ import axios from 'axios';
 interface HomeProps{
 }
 
-const Home:React.FC<HomeProps> =(props) :React.ReactElement => {
+const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
-	const [musicUrl, setMusicUrl] = React.useState<any>(null);
     const dispatch = useAppDispatch();
 
       React.useEffect(
@@ -34,8 +32,7 @@ const Home:React.FC<HomeProps> =(props) :React.ReactElement => {
 
 
     return (
-        <Box >
-            This is Home Page
+        <Box style={{height: '150vh'}}>
             <SideBar 
 				handleClick={React.useCallback(
 					()=>{

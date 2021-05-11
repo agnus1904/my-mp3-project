@@ -46,8 +46,8 @@ const options = (dark: boolean): ThemeOptions => {
     typography: {
       fontFamily: 'Lato',
       h1: {
-        fontFamily: 'Zen Dots',
-        fontWeight: 300,
+        fontFamily: 'Lato',
+        fontWeight: 600,
         fontSize: '86px',
         lineHeight: '127px',
         letterSpacing: '-1.5px',
@@ -56,10 +56,10 @@ const options = (dark: boolean): ThemeOptions => {
       h3: { fontFamily: 'Roboto Slab', fontSize: '48px', lineHeight: '63px' },
       h4: { fontFamily: 'Roboto Slab', fontSize: '34px', lineHeight: '45px', letterSpacing: '0.25px' },
       h5: { fontFamily: 'Zen Dots', fontSize: '24px', lineHeight: '32px' },
-      h6: { fontFamily: 'Zen Dots', fontWeight: 500, fontSize: '20px', lineHeight: '26px', letterSpacing: '0.15px' },
-      subtitle1: { fontFamily: 'Zen Dots', fontSize: '16px', lineHeight: '19px', letterSpacing: '0.15px' },
+      h6: { fontFamily: 'Lato', fontWeight: 500, fontSize: '20px', lineHeight: '26px', letterSpacing: '0.15px' },
+      subtitle1: { fontFamily: 'Lato', fontSize: '16px', lineHeight: '19px', letterSpacing: '0.15px' },
       subtitle2: {
-        fontFamily: 'Zen Dots',
+        fontFamily: 'Lato',
         fontWeight: 500,
         fontSize: '14px',
         lineHeight: '16.41px',

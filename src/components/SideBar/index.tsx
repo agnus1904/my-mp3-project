@@ -24,8 +24,8 @@ const defaultProps : SideBarProps = {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-        minHeight: '100vh',
-        position: 'fixed',
+        height: '100%',
+        position: 'relative',
         width: 250,
         top: 0,
         left: 0,
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: theme.palette.background.paper,
+        paddingBottom: 150,
     },
     content: {
         // border: '1px solid red',

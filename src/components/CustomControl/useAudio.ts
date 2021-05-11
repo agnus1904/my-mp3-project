@@ -3,9 +3,11 @@ import React from 'react';
 const useAudio = (base64: string) => {
 
     const [audio] = React.useState(new Audio(base64));
-    const [playing, setPlaying] = React.useState(false);
-    const [audioCurrentTime, setAudioCurrentTime] = React.useState(0);
-    const [audioDuration, setAudioDuration] = React.useState(0);
+    const [playing, setPlaying] = React.useState<boolean>(false);
+    const [audioCurrentTime, setAudioCurrentTime] = React.useState<number>(0);
+    const [audioDuration, setAudioDuration] = React.useState<number>(0);
+    const [volume, setVolume] = React.useState<number>(0.8);
+    const [muted, setMuted] = React.useState<boolean>(false);
 
     const toggle = () => {
         setPlaying(!playing);
@@ -17,6 +19,12 @@ const useAudio = (base64: string) => {
 
     const onLoad = ()=>{
         setAudioDuration(audio.duration);
+        audio.volume=0.8;
+    }
+
+    const toggleMute = ()=>{
+        audio.muted = !audio.muted;
+        setMuted(audio.muted);
     }
 
     const timeChange = (newTime: number)=>{
@@ -25,6 +33,7 @@ const useAudio = (base64: string) => {
 
     const volumeChange = (newVolume: number)=>{
         audio.volume = newVolume/100;
+        setVolume(newVolume/100);
     }
   
     React.useEffect(() => {
@@ -45,9 +54,9 @@ const useAudio = (base64: string) => {
     }, []);
   
     return {
-        playing, toggle, 
-        currentTime : audioCurrentTime, duration: audioDuration,
-        timeChange, volumeChange,
+        playing, toggle, muted,
+        currentTime : audioCurrentTime, duration: audioDuration, volume,
+        timeChange, volumeChange, toggleMute
     };
 };
 

@@ -23,16 +23,16 @@ import CustomControl from 'components/CustomControl';
 
 
 // pages 
-import OverView from './pages/OverView';
-import Home from './pages/Home';
-import Explore from './pages/Explore';
-import NotFound from './pages/NotFound';
+// import OverView from './pages/OverView';
+// import Home from './pages/Home';
+// import Explore from './pages/Explore';
+// import NotFound from './pages/NotFound';
 
 // lazy load Pages
-// const OverView: React.FC = React.lazy(()=> import('./pages/OverView'));
-// const Home: React.FC  = React.lazy(()=> import('./pages/Home'));
-// const Explore: React.FC  = React.lazy(()=> import('./pages/Explore'));
-// const NotFound: React.FC  = React.lazy(()=> import('./pages/NotFound'));
+const OverView: React.FC = React.lazy(()=> import('./pages/OverView'));
+const Home: React.FC  = React.lazy(()=> import('./pages/Home'));
+const Explore: React.FC  = React.lazy(()=> import('./pages/Explore'));
+const NotFound: React.FC  = React.lazy(()=> import('./pages/NotFound'));
 
 const App: React.FC = ()=>{
 	
@@ -71,7 +71,7 @@ const App: React.FC = ()=>{
 			<Box className="App">
 				<CustomProgress />
 				<CustomControl />
-				{/* <BrowserRouter> */}
+				<React.Suspense fallback={(<></>)}>
 					<Switch>
 						<Redirect exact to='/' from='/OverView'/>
 
@@ -81,7 +81,7 @@ const App: React.FC = ()=>{
 
 						<Route component={NotFound} />
 					</Switch>
-				{/* </BrowserRouter> */}
+				</React.Suspense>
 			</Box>
 		</ThemeProvider>
 	);

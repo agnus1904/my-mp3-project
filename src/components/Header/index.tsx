@@ -91,9 +91,6 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h5" color="inherit" >
-                        {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                            <MenuIcon />
-                        </IconButton> */}
                         <Link to='' >MyMp3</Link>
                     </Typography>
                     <Typography variant='subtitle1' color='textPrimary'>

@@ -14,11 +14,6 @@ import {
 } from '@material-ui/icons';
 
 interface SideBarProps{
-    handleClick?: (()=>void) | null,
-}
-
-const defaultProps : SideBarProps = {
-    handleClick: null
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,31 +60,29 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+const menu = [
+    {icon: HomeIcon, title: 'Home'},
+    {icon: ExploreIcon, title: 'Explore'}
+];
+
+const library = [
+    {icon: ExploreIcon, title: 'For you'},
+    {icon: RepeatIcon, title: 'Recent'},
+    {icon: FavoriteIcon, title: 'Favorite'},
+    {icon: LibraryMusicIcon, title: 'Album'},
+    {icon: MicIcon, title: 'Atists'}
+]
+
+const playList = [
+    {icon: AddBoxOutlinedIcon, title: 'Submit new'},
+    {icon: MusicNoteIcon, title: 'Adrenaline workout'},
+    {icon: MusicNoteIcon, title: 'For running'},
+    {icon: MusicNoteIcon, title: 'Crazy morning'},
+    {icon: MusicNoteIcon, title: 'Autumn Leaves'},
+]
 
 const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
     const classes = useStyles();
-    const {handleClick} = props;
-
-    const menu = [
-        {icon: HomeIcon, title: 'Home'},
-        {icon: ExploreIcon, title: 'Explore'}
-    ];
-
-    const library = [
-        {icon: ExploreIcon, title: 'For you'},
-        {icon: RepeatIcon, title: 'Recent'},
-        {icon: FavoriteIcon, title: 'Favorite'},
-        {icon: LibraryMusicIcon, title: 'Album'},
-        {icon: MicIcon, title: 'Atists'}
-    ]
-
-    const playList = [
-        {icon: AddBoxOutlinedIcon, title: 'Submit new'},
-        {icon: MusicNoteIcon, title: 'Adrenaline workout'},
-        {icon: MusicNoteIcon, title: 'For running'},
-        {icon: MusicNoteIcon, title: 'Crazy morning'},
-        {icon: MusicNoteIcon, title: 'Autumn Leaves'},
-    ]
 
     return (
         <Box className={classes.root}>
@@ -102,17 +95,13 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                         Menu
                     </Typography>
                     <Box className='items'>
-                        {
-                            menu.length===0 ? '' : 
-                                menu.map(
-                                    (item, index)=>(
-                                        <Box className='item' key={index}>
-                                            <Box component={item.icon}/>
-                                            <Link to=''>{item.title}</Link>
-                                        </Box>
-                                    )
-                                )
-                        }
+                        {menu.length===0 || 
+                            menu.map((item, index)=>(
+                                <Box className='item' key={index}>
+                                    <Box component={item.icon}/>
+                                    <Link to=''>{item.title}</Link>
+                                </Box>
+                        ))}
                     </Box>
                 </Box>
                 <Box className='group'>
@@ -120,17 +109,13 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                         Library
                     </Typography>
                     <Box className='items'>
-                        {
-                            library.length===0 ? '' : 
-                                library.map(
-                                    (item, index)=>(
-                                        <Box className='item' key={index}>
-                                            <Box component={item.icon}/>
-                                            <Link to=''>{item.title}</Link>
-                                        </Box>
-                                    )
-                                )
-                        }
+                        {library.length===0 ||
+                            library.map((item, index)=>(
+                                <Box className='item' key={index}>
+                                    <Box component={item.icon}/>
+                                    <Link to=''>{item.title}</Link>
+                                </Box>
+                        ))}
                     </Box>
                 </Box>
                 <Box className='group'>
@@ -138,24 +123,18 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                         Playlist
                     </Typography>
                     <Box className='items'>
-                        {
-                            playList.length===0 ? '' : 
-                                playList.map(
-                                    (item, index)=>(
-                                        <Box className='item' key={index}>
-                                            <Box component={item.icon}/>
-                                            <Link to=''>{item.title}</Link>
-                                        </Box>
-                                    )
-                                )
-                        }
+                        {playList.length===0 ||
+                            playList.map((item, index)=>(
+                                <Box className='item' key={index}>
+                                    <Box component={item.icon}/>
+                                    <Link to=''>{item.title}</Link>
+                                </Box>
+                        ))}
                     </Box>
                 </Box>
             </Box>
         </Box>
     );
 };
-
-SideBar.defaultProps = defaultProps;
 
 export default React.memo(SideBar);

@@ -4,9 +4,6 @@ import React from 'react';
 interface BannerProps{
 }
 
-const defaultProps : BannerProps = {
-}
-
 const useStyle = makeStyles(theme=>({
     root:{
     }
@@ -21,7 +18,5 @@ const Banner:React.FC<BannerProps> =(props) :React.ReactElement => {
         </Box>
     );
 };
-
-Banner.defaultProps = defaultProps;
 
 export default Banner;

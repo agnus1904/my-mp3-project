@@ -3,13 +3,13 @@ import Slider from '@material-ui/core/Slider';
 
 interface Props {
     timeChange: (value: number)=>void,
-    currentTime: number,
-    duration: number,
+    audioCurrentTime: number,
+    audioDuration: number,
 }
 
 const ControlTime: React.FC<Props> = (props):React.ReactElement=>{
 
-    const { timeChange, duration, currentTime } = props;
+    const { timeChange, audioDuration, audioCurrentTime } = props;
     const [timeValue, setTimeValue] = React.useState<number | string | Array<number | string>>(0);
     const typeTimeoutRef = React.useRef<any>(null);
 
@@ -20,21 +20,22 @@ const ControlTime: React.FC<Props> = (props):React.ReactElement=>{
         typeTimeoutRef.current = setTimeout(
             ()=>{
                 timeChange(parseInt(value.toString()));
-            }, 300
+                typeTimeoutRef.current= null;
+            }, 200
         );
     };
 
     React.useEffect(
         ()=>{
             if(!typeTimeoutRef.current){
-                currentTime===0 ? setTimeValue(0) : 
-                setTimeValue(currentTime/duration*100);
+                audioCurrentTime===0 ? setTimeValue(0) : 
+                setTimeValue(audioCurrentTime/audioDuration*100);
             }
-        }, [currentTime]
+        }, [audioCurrentTime]
     );
 
     const formatTime: (value: number)=>string = (value)=>(
-        (new Date(Math.ceil((value*duration)/100) * 1000)).toISOString().substr(14,5)
+        (new Date(Math.ceil((value*audioDuration)/100) * 1000)).toISOString().substr(14,5)
     )
   
     return(

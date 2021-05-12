@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { useAppSelector } from 'app/hooks';
+import clsx from 'clsx';
 
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
@@ -20,9 +21,6 @@ import useAudio from './useAudio';
 import ControlTime from './ControlTime';
 import ControlVolume from './ControlVolume';
 
-interface CustomControlProps{
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -32,10 +30,19 @@ const useStyles = makeStyles((theme: Theme) =>
         zIndex: 15,
         position: 'fixed',
         left: 0,
-        bottom: -90,
+        bottom: 0,
         borderRadius: '15px 15px 0 0',
         display: 'flex',
         alignItems: 'center',
+        transition: 'all 0.5s ease-in-out'
+    },
+    rootShow:{
+        bottom: -80,
+    },
+    button: {
+        position: 'absolute',
+        top: -40,
+        right: 0,
     },
     info: {
         width: '100%',
@@ -87,23 +94,22 @@ const useStyles = makeStyles((theme: Theme) =>
                 color: '#AAA',
             }
         }
-    }
+    },
   }),
 );
 
-const  MyAudio: React.FC<{base64: string}> = (props):React.ReactElement=>{
+const  MyAudio: React.FC<any> = (props):React.ReactElement=>{
 
     const classes = useStyles();
     const { base64 } = props;
 
     const {
-        playing, toggle, muted,
-        currentTime, duration, volume,
-        timeChange, volumeChange, toggleMute
-    } = useAudio("data:audio/mpeg;base64, "+base64);
+        playing, muted, audioCurrentTime, audioDuration, audioVolume,
+        togglePlay, timeChange, volumeChange, toggleMute
+    } = useAudio("data:audio/mpeg;base64, "+ base64);
 
     return(
-        <Box className={classes.root} p={1}>
+        <>
             <Grid container>
                 <Grid item xs={3}>
                     <Box className={classes.info}>
@@ -121,52 +127,64 @@ const  MyAudio: React.FC<{base64: string}> = (props):React.ReactElement=>{
                 <Grid item xs={7}>
                     <Box className={classes.control}>
                         <SkipPreviousIcon />
-                        {
-                            playing? 
-                                (<PauseCircleFilledIcon
-                                    onClick={toggle}
-                                />) : 
-                                (<PlayCircleFilledIcon 
-                                    onClick={toggle}
-                                />)
+                        {playing? 
+                            (<PauseCircleFilledIcon onClick={togglePlay} />) : 
+                            (<PlayCircleFilledIcon onClick={togglePlay} />)
                         }
                         <SkipNextIcon />
                         <Box p={2} style={{color: '#17b717'}}>
                             <Typography variant='body2'>
-                                {(new Date(Math.ceil(currentTime) * 1000)).toISOString().substr(14,5)}
+                                {(new Date(Math.ceil(audioCurrentTime) * 1000)).toISOString().substr(14,5)}
                             </Typography>
                         </Box>
-                        <ControlTime timeChange={timeChange} currentTime={currentTime} duration={duration} />
+                        <ControlTime timeChange={timeChange} audioCurrentTime={audioCurrentTime} audioDuration={audioDuration} />
                         <Box p={2}>
                             <Typography variant='body2'>
-                                {(new Date(Math.ceil(duration) * 1000)).toISOString().substr(14,5)}
+                                {(new Date(Math.ceil(audioDuration) * 1000)).toISOString().substr(14,5)}
                             </Typography>    
                         </Box>
                     </Box>
                 </Grid>
                 <Grid item xs={2}>
                     <Box className={classes.volume}>
-                        {
-                            muted ? (<VolumeOffIcon onClick={toggleMute} />) : 
-                                volume === 0 ? (<VolumeMuteIcon onClick={toggleMute} />) :
-                                volume > 0 && volume <=0.6? (<VolumeDownIcon onClick={toggleMute} />):
-                                volume > 0.6 && volume <=1 ? (<VolumeUpIcon onClick={toggleMute} />) : ''
+                        {muted ? (<VolumeOffIcon onClick={toggleMute} />) : 
+                            audioVolume === 0 ? (<VolumeMuteIcon onClick={toggleMute} />) :
+                            audioVolume > 0 && audioVolume <=0.4? (<VolumeDownIcon onClick={toggleMute} />):
+                            audioVolume > 0.4 && audioVolume <=1 ? (<VolumeUpIcon onClick={toggleMute} />) : ''
                         }
                         <ControlVolume volumeChange={volumeChange} />
                     </Box>
                 </Grid>
             </Grid>
-        </Box>
+        </>
     )
 }
 
+interface CustomControlProps{
+}
 
 const CustomControl: React.FC<CustomControlProps> = ()=>{
     const controlStore = useAppSelector(state=>state.control);
+    const classes = useStyles();
+
+    const [isShowing, setIsShowing] = React.useState(true);
+    console.log(isShowing);
+
     return(
-        <>
-            {controlStore.base64 && <MyAudio base64={controlStore.base64}/>}
-        </>
+        <Box
+            className={clsx(classes.root, {
+                [classes.rootShow]: isShowing === true,
+            })}
+            p={1}
+        >
+            <Button 
+                className={classes.button}
+                onClick={()=>{setIsShowing(!isShowing)}}
+            >Toggle</Button>
+            {
+                controlStore.base64 && <MyAudio base64={controlStore.base64}/>
+            }
+        </Box>
     )
 }
 

@@ -11,13 +11,11 @@ import { useHistory } from 'react-router-dom'
 
 const Root: React.FC = () => { 
    const history = useHistory() 
-
   //  React.useEffect(() => {
   //     return history.listen((location) => { 
   //        console.log(`You changed the page to: ${location.pathname}`) 
   //     }) 
   //  },[history]) 
-
    return ( 
       <App /> 
    ) 

@@ -33,13 +33,7 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
     return (
         <Box style={{height: '150vh'}}>
-            <SideBar 
-				handleClick={React.useCallback(
-					()=>{
-						console.log('abcd');
-					},[])
-				}
-			/>
+            <SideBar />
 
         </Box>
     );

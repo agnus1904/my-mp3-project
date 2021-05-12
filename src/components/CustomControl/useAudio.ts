@@ -6,35 +6,35 @@ const useAudio = (base64: string) => {
     const [playing, setPlaying] = React.useState<boolean>(false);
     const [audioCurrentTime, setAudioCurrentTime] = React.useState<number>(0);
     const [audioDuration, setAudioDuration] = React.useState<number>(0);
-    const [volume, setVolume] = React.useState<number>(0.8);
+    const [audioVolume, setAudioVolume] = React.useState<number>(0.8);
     const [muted, setMuted] = React.useState<boolean>(false);
 
-    const toggle = () => {
+    const togglePlay = ()=>{
         setPlaying(!playing);
     };
-
-    const onTimeUpdate = ()=>{
-        setAudioCurrentTime(audio.currentTime);
-    }
-
-    const onLoad = ()=>{
-        setAudioDuration(audio.duration);
-        audio.volume=0.8;
-    }
 
     const toggleMute = ()=>{
         audio.muted = !audio.muted;
         setMuted(audio.muted);
     }
 
-    const timeChange = (newTime: number)=>{
-        audio.currentTime = newTime*audio.duration/100;
-    }
+    const onTimeUpdate = React.useCallback(()=>{
+        setAudioCurrentTime(audio.currentTime);
+    },[]);
 
-    const volumeChange = (newVolume: number)=>{
+    const onLoad = React.useCallback(()=>{
+        audio.volume=0.8;
+        setAudioDuration(audio.duration);
+    },[]);
+
+    const timeChange = React.useCallback((newTime: number)=>{
+        audio.currentTime = newTime*audio.duration/100;
+    },[]);
+
+    const volumeChange = React.useCallback((newVolume: number)=>{
         audio.volume = newVolume/100;
-        setVolume(newVolume/100);
-    }
+        setAudioVolume(newVolume/100);
+    },[]);
   
     React.useEffect(() => {
         playing ? audio.play() : audio.pause();
@@ -54,9 +54,8 @@ const useAudio = (base64: string) => {
     }, []);
   
     return {
-        playing, toggle, muted,
-        currentTime : audioCurrentTime, duration: audioDuration, volume,
-        timeChange, volumeChange, toggleMute
+        playing, muted, audioCurrentTime, audioDuration, audioVolume,
+        togglePlay, timeChange, volumeChange, toggleMute
     };
 };
 

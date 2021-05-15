@@ -10,11 +10,11 @@ const useAudio = (src: string) => {
     const [muted, setMuted] = React.useState<boolean>(false);
 
     const togglePlay = ()=>{
-        setPlaying(!playing);
+        setPlaying(playing => !playing);
     };
 
     const toggleMute = ()=>{
-        setMuted(!muted);
+        setMuted(muted => !muted);
     }
 
     const onTimeUpdate = React.useCallback(()=>{
@@ -24,7 +24,7 @@ const useAudio = (src: string) => {
     const onLoad = ()=>{
         setAudioVolume(0.8);
         setAudioDuration(audio.duration);
-        setTimeout(()=>{setPlaying(true)},2000);
+        setPlaying(true);
     };
 
     const timeChange = React.useCallback((newTime: number)=>{

@@ -40,7 +40,7 @@ const App: React.FC = ()=>{
 					<CustomProgress />
 					<CustomControl />
 					<SideBar />
-					<Box style={{width: '100%'}}>
+					<Box style={{width: '100%', padding: '30px 40px 0 20px', display: 'flex', justifyContent: 'center'}}>
 						<React.Suspense fallback={(<></>)}>
 								<Switch>
 									<Redirect exact to='/' from='/OverView'/>

@@ -3,7 +3,6 @@ import React from 'react';
 import {useAppDispatch} from 'app/hooks'
 import { setSuccess } from 'app/slices/progressSlice';
 import { setOpen } from 'app/slices/controlSlice';
-import axios from 'axios';
 import HomeHeader from './HomeHeader';
 import musicApi from 'api/musicApi';
 
@@ -56,7 +55,7 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
     },[data]);
 
     return (
-        <Box style={{width: '100%', padding: '30px 20px'}}>
+        <Box style={{width: '1000px'}}>
             <HomeHeader 
                 initialValue={initialValue}
                 onSubmit={onSubmit}

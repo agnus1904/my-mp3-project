@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const  MyAudio: React.FC<any> = (props):React.ReactElement=>{
+const  MyAudio: React.FC<{base64: string}> = (props):React.ReactElement=>{
 
     const classes = useStyles();
     const { base64 } = props;

@@ -1,11 +1,15 @@
 import { Box } from '@material-ui/core';
-import SideBar from 'components/SideBar';
 import React from 'react';
 import {useAppDispatch} from 'app/hooks'
 import { setSuccess } from 'app/slices/progressSlice';
 import { setOpen } from 'app/slices/controlSlice';
 import axios from 'axios';
+import HomeHeader from './HomeHeader';
+import musicApi from 'api/musicApi';
 
+interface MyFormValues {
+    name: String
+}
 
 interface HomeProps{
 }
@@ -13,28 +17,50 @@ interface HomeProps{
 const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
     const dispatch = useAppDispatch();
+    const [data, setData] = React.useState<boolean>(false);
 
-      React.useEffect(
+    const initialValue = {name: ''};
+    const onSubmit= (values: MyFormValues)=>{
+        console.log('onsubmit', values);
+    }
+
+    React.useEffect(
         ()=>{
+            let isMounted = true;
             const fetchBase64 = async ()=>{
-                let response = await axios.get(
-                    "http://localhost/MyMp3/"
-                );
-                let res = await response.data;
-                const action = setOpen(res);
-                const actionSuccess = setSuccess();
-                dispatch(actionSuccess);
-		        dispatch(action);
+                try {
+                    const response = await musicApi.get('1');
+                    if(isMounted){
+                        const action = setOpen(response.data);
+                        const actionSuccess = setSuccess();
+                        dispatch(actionSuccess);
+                        dispatch(action);
+                        setData(true);
+                    }
+                }catch(error) {
+                    console.log('error', error);
+                }
             }
             fetchBase64();
+            return ()=>{
+                isMounted= false;
+            };
         },[]
     );
 
+    React.useEffect(()=>{
+        if(data){
+            const actionSuccess = setSuccess();
+            dispatch(actionSuccess);
+        }
+    },[data]);
 
     return (
-        <Box style={{height: '150vh'}}>
-            <SideBar />
-
+        <Box style={{width: '100%', padding: '30px 20px'}}>
+            <HomeHeader 
+                initialValue={initialValue}
+                onSubmit={onSubmit}
+            />
         </Box>
     );
 };

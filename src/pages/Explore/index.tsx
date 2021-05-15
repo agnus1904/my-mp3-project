@@ -1,4 +1,7 @@
+import { Box } from '@material-ui/core';
 import React from 'react';
+import {useAppDispatch} from 'app/hooks'
+import { setSuccess } from 'app/slices/progressSlice';
 
 interface ExploreProps{
 }
@@ -8,12 +11,24 @@ const defaultProps : ExploreProps = {
 
 const Explore:React.FC<ExploreProps> =(props) :React.ReactElement => {
 
-    // const {} = props;
+    const dispatch = useAppDispatch();
+
+    React.useEffect(
+        ()=>{
+            const timer = setTimeout(()=>{
+                const actionSuccess = setSuccess();
+                dispatch(actionSuccess);
+            }, 2000);
+            return ()=>{
+                clearTimeout(timer);
+            }
+        },[]
+    );
 
     return (
-        <div>
-            This is Explore Page
-        </div>
+        <Box style={{width: '100%', paddingTop: '50px'}}>
+            This is Explore page
+        </Box>
     );
 };
 

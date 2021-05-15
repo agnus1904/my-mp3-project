@@ -2,7 +2,8 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Header from 'components/Header';
 import React from 'react';
-import images from 'constant/images'
+import images from 'constants/images'
+import { Link } from 'react-router-dom';
 interface OverViewProps{
 }
 
@@ -71,15 +72,15 @@ const OverView:React.FC<OverViewProps> =(props) :React.ReactElement => {
                         
                     </Typography>
                     <br/>
-                    <Button variant='contained'>
-                        <Typography variant='subtitle2' >
-                            Get Start
-                        </Typography>
-                    </Button>
-                
+                    <Link to='/home' >
+                        <Button variant='contained'>
+                            <Typography variant='subtitle2' >
+                                Get Start
+                            </Typography>
+                        </Button>
+                    </Link>
                 </Box>
             </Box>
-
         </Box>
     );
 };

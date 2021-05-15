@@ -1,7 +1,10 @@
 import React from 'react';
+
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core';
-import { Link} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import clsx from 'clsx';
+
 import {
     Home as HomeIcon,
     Explore as ExploreIcon,
@@ -21,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
         height: '100%',
         position: 'relative',
-        width: 250,
+        width: 300,
         top: 0,
         left: 0,
         padding: '30px 0',
@@ -31,22 +34,38 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingBottom: 150,
     },
     content: {
-        // border: '1px solid red',
-        width: 200,
+        width: '100%',
         height: '100%',
         '& .group':{
             color: 'white',
             textAlign: 'start',
-            // border: '1px solid blue',
+            paddingLeft: 30,
             margin: '40px 0',
             '& .items':{
                 fontSize: 15,
                 marginTop: 20,
-
                 '& .item':{
                     display: 'flex',
                     alignItems: 'center',
                     margin: '10px 0',
+                    position: 'relative',
+                    '& span': {
+                        height: '0%',
+                        position: 'absolute',
+                        right: 0,
+                        width: 2,
+                        backgroundColor: '#FF3200',
+                        transition: 'height 300ms ease-in-out',
+                    },
+                    '&.item-picked': {
+                        color: '#FF3200',
+                        '& span':{
+                            height: '100%',
+                        },
+                        '& a':{
+                            color: '#FF3200',
+                        }
+                    },
                     '& svg':{
                         marginRight: 10,
                         marginBottom: 4,
@@ -61,16 +80,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const menu = [
-    {icon: HomeIcon, title: 'Home'},
-    {icon: ExploreIcon, title: 'Explore'}
+    {icon: HomeIcon, title: 'Home', path: '/home'},
+    {icon: ExploreIcon, title: 'Explore', path: '/explore'}
 ];
 
 const library = [
-    {icon: ExploreIcon, title: 'For you'},
-    {icon: RepeatIcon, title: 'Recent'},
-    {icon: FavoriteIcon, title: 'Favorite'},
-    {icon: LibraryMusicIcon, title: 'Album'},
-    {icon: MicIcon, title: 'Atists'}
+    {icon: ExploreIcon, title: 'For you', path: '/for-you'},
+    {icon: RepeatIcon, title: 'Recent', path: '/reccent'},
+    {icon: FavoriteIcon, title: 'Favorite', path: '/favorite'},
+    {icon: LibraryMusicIcon, title: 'Album', path: '/album'},
+    {icon: MicIcon, title: 'Atists', path: '/atists'}
 ]
 
 const playList = [
@@ -82,8 +101,15 @@ const playList = [
 ]
 
 const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
-    const classes = useStyles();
 
+    const classes = useStyles();
+    const location = useLocation();
+
+    if(location.pathname==='/'){
+        return(
+            <></>
+        )
+    }
     return (
         <Box className={classes.root}>
             <Box className={classes.content}>
@@ -97,9 +123,15 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                     <Box className='items'>
                         {menu.length===0 || 
                             menu.map((item, index)=>(
-                                <Box className='item' key={index}>
+                                <Box 
+                                    className={clsx('item' , {
+                                        ['item-picked']: location.pathname === item.path,
+                                    })}
+                                    key={index}
+                                >
                                     <Box component={item.icon}/>
-                                    <Link to=''>{item.title}</Link>
+                                    <Link to={item.path}>{item.title}</Link>
+                                    <span />
                                 </Box>
                         ))}
                     </Box>
@@ -111,9 +143,15 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                     <Box className='items'>
                         {library.length===0 ||
                             library.map((item, index)=>(
-                                <Box className='item' key={index}>
+                                <Box
+                                    className={clsx('item' , {
+                                        ['item-picked']: location.pathname === item.path,
+                                    })}
+                                    key={index}
+                                >
                                     <Box component={item.icon}/>
-                                    <Link to=''>{item.title}</Link>
+                                    <Link to={item.path}>{item.title}</Link>
+                                    <span />
                                 </Box>
                         ))}
                     </Box>
@@ -127,7 +165,7 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                             playList.map((item, index)=>(
                                 <Box className='item' key={index}>
                                     <Box component={item.icon}/>
-                                    <Link to=''>{item.title}</Link>
+                                    <Typography variant='subtitle1'>{item.title}</Typography>
                                 </Box>
                         ))}
                     </Box>

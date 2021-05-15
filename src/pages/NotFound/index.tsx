@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import React from 'react';
 
 interface NotFoundProps{
@@ -11,9 +12,9 @@ const NotFound:React.FC<NotFoundProps> =(props) :React.ReactElement => {
     // const {} = props;
 
     return (
-        <div>
-            This is NotFound Page
-        </div>
+        <Box style={{width: '100%'}}>
+            This is not Found page
+        </Box>
     );
 };
 

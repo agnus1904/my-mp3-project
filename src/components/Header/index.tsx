@@ -7,15 +7,11 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { setClose, setWaiting, setSuccess, setSuccessfalse } from 'app/slices/progressSlice';
 import { changeTheme } from 'app/slices/themeSilce';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-
 interface HeaderProps{
-}
-
-const defaultProps : HeaderProps = {
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,6 +65,7 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
     const darkMode = useAppSelector(state => state.darkMode.value);
     const progresser = useAppSelector(state => state.progress);
     const dispatch = useAppDispatch();
+    const history = useHistory();
 
     // console.log('header render');
     const changeDarkTheme = ()=>{
@@ -77,7 +74,7 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
     }
 
     const setWaitingClick = ()=>{
-        const action = progresser.waiting ? setClose() : setWaiting();
+        const action = progresser.waiting ? setClose() : setWaiting(history.location.pathname);
         dispatch(action);
     }
 
@@ -132,7 +129,5 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
         </Box>
     );
 };
-
-Header.defaultProps = defaultProps;
 
 export default Header;

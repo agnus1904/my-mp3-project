@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
         transition: 'all 0.5s ease-in-out'
     },
     rootShow:{
-        bottom: -80,
+        bottom: -90,
     },
     button: {
         position: 'absolute',
@@ -167,13 +167,23 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
     const controlStore = useAppSelector(state=>state.control);
     const classes = useStyles();
 
-    const [isShowing, setIsShowing] = React.useState(true);
-    console.log(isShowing);
+    const [isShowing, setIsShowing] = React.useState(false);
+
+    React.useEffect(
+        ()=>{
+            const timer = setTimeout(()=>{
+                controlStore.base64 && setIsShowing(true);
+            },1000);
+            return ()=>{
+                clearTimeout(timer);
+            }
+        },[controlStore.base64]
+    );
 
     return(
         <Box
             className={clsx(classes.root, {
-                [classes.rootShow]: isShowing === true,
+                [classes.rootShow]: isShowing === false,
             })}
             p={1}
         >

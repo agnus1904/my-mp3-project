@@ -2,12 +2,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
 interface ControlState {
-  base64: string | null,
+  music_id: string | null,
+  music_name: string | null,
+  music_singer: string | null,
+  music_url: string | null,
+  music_avatar_url: string | null,
+  music_banner_url: string | null
 }
 
 // Define the initial state using that type
 const initialState: ControlState = {
-  base64: null,
+  music_id: null,
+  music_name: null,
+  music_singer: null,
+  music_url: null,
+  music_avatar_url: null,
+  music_banner_url: null,
 }
 
 const controlSlice = createSlice({
@@ -15,11 +25,21 @@ const controlSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState : initialState,
   reducers: {
-    setOpen: (state, action: PayloadAction<string>) => {
-      state.base64=action.payload;
+    setOpen: (state, action: PayloadAction<any>) => {
+      state.music_id = action.payload.music_id;
+      state.music_name = action.payload.music_name;
+      state.music_singer = action.payload.music_singer;
+      state.music_url= action.payload.music_url;
+      state.music_avatar_url = action.payload.music_avatar_url;
+      state.music_banner_url= action.payload.music_banner_url;
     },
     setClose: (state) => {
-      state.base64=null
+      state.music_id = null;
+      state.music_name = null;
+      state.music_singer = null;
+      state.music_url=null;
+      state.music_avatar_url = null;
+      state.music_banner_url= null;
     },
   },
 })

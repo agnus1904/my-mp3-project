@@ -18,7 +18,7 @@ const Explore:React.FC<ExploreProps> =(props) :React.ReactElement => {
             const timer = setTimeout(()=>{
                 const actionSuccess = setSuccess();
                 dispatch(actionSuccess);
-            }, 2000);
+            }, 1000);
             return ()=>{
                 clearTimeout(timer);
             }

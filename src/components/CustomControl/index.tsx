@@ -8,6 +8,8 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import VolumeOffIcon from '@material-ui/icons/VolumeOff';
 import VolumeMuteIcon from '@material-ui/icons/VolumeMute';
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
         width: '100%',
-        height: 100,
+        height: 80,
         backgroundColor: '#444',
         zIndex: 15,
         position: 'fixed',
@@ -34,21 +36,47 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '15px 15px 0 0',
         display: 'flex',
         alignItems: 'center',
-        transition: 'all 0.5s ease-in-out'
+        transition: 'all 0.5s ease-in-out',
+        [theme.breakpoints.down('sm')]: {
+            height: 150,
+            bottom: 50,
+        },
+        '& .box-1':{
+            [theme.breakpoints.down('sm')]: {
+                order: 1,
+            },
+        },
+        '& .box-2':{
+            [theme.breakpoints.down('sm')]: {
+                order: 2,
+            },
+        },
+        '& .box-3':{
+            [theme.breakpoints.down('sm')]: {
+                order: 1,
+            },
+        },
     },
     rootShow:{
-        bottom: -90,
+        bottom: -95,
     },
     button: {
+        cursor: 'pointer',
         position: 'absolute',
-        top: -40,
-        right: 0,
+        top: -35,
+        right: 10,
     },
     info: {
         width: '100%',
         height: '100%',
-        paddingLeft: 30,
+        paddingLeft: 20,
         display: 'flex',
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 0 10px 0px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            padding: '10px 0 10px 10px',
+        },
         '& .info-image':{
             width: 50,
             height: 50,
@@ -56,6 +84,8 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRadius: 5,
             marginRight: 15,
             marginTop: 5,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
         },
         '& .info-text':{
             textAlign: 'start',
@@ -67,6 +97,12 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         alignItems: 'center',
         paddingRight: 80,
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 0px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 10px',
+        },
         '& svg':{
             cursor: 'pointer',
             margin: 5,
@@ -83,7 +119,13 @@ const useStyles = makeStyles((theme: Theme) =>
         height: '100%',
         display: 'flex',
         alignItems: 'center',
-        paddingRight: 30,
+        paddingRight: 20,
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 0px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: '10px 10px 10px 0px',
+        },
         '& svg':{
             cursor: 'pointer'
         },
@@ -98,58 +140,83 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const  MyAudio: React.FC<{base64: string}> = (props):React.ReactElement=>{
+interface MyAudioProps {
+    music_id: string | null,
+    music_name: string | null,
+    music_singer: string | null,
+    music_url: string,
+    music_avatar_url: string | null,
+}
+
+const  MyAudio: React.FC<MyAudioProps> = (props):React.ReactElement=>{
 
     const classes = useStyles();
-    const { base64 } = props;
+    const { 
+        music_name,
+        music_singer,
+        music_url,
+        music_avatar_url
+    } = props;
 
+    
     const {
         playing, muted, audioCurrentTime, audioDuration, audioVolume,
-        togglePlay, timeChange, volumeChange, toggleMute
-    } = useAudio("data:audio/mpeg;base64, "+ base64);
+        togglePlay, timeChange, volumeChange, toggleMute, stopAudio
+    } = useAudio(music_url);
+    
+    React.useEffect(()=>{
+        return()=>{
+            stopAudio();
+        }
+    },[]);
 
     return(
         <>
             <Grid container>
-                <Grid item xs={3}>
+                <Grid item xs={'auto'} sm={1} md={'auto'}/>
+                <Grid item xs={8} sm={6} md={3} className='box-1' >
                     <Box className={classes.info}>
-                        <Box className='info-image'/>
+                        <Box className='info-image' style={{backgroundImage: `url(${music_avatar_url})` }}/>
                         <Box className='info-text'>
                             <Typography variant='body1'>
-                                Hay Trao Cho Anh
+                                {music_name}
                             </Typography>
                             <Typography variant='body2'>
-                                Son Tung
+                                {music_singer}
                             </Typography>
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item xs={7}>
-                    <Box className={classes.control}>
-                        <SkipPreviousIcon />
-                        {playing? 
-                            (<PauseCircleFilledIcon onClick={togglePlay} />) : 
-                            (<PlayCircleFilledIcon onClick={togglePlay} />)
-                        }
-                        <SkipNextIcon />
-                        <Box p={2} style={{color: '#17b717'}}>
-                            <Typography variant='body2'>
-                                {(new Date(Math.ceil(audioCurrentTime) * 1000)).toISOString().substr(14,5)}
-                            </Typography>
+                <Grid item container xs={12} sm={12} md={7} className='box-2'>
+                    <Grid item xs={'auto'} sm={1} md={'auto'} />
+                    <Grid item xs={12} sm={10} md={12} >
+                        <Box className={classes.control}>
+                            <SkipPreviousIcon />
+                            {playing? 
+                                (<PauseCircleFilledIcon onClick={togglePlay} />) : 
+                                (<PlayCircleFilledIcon onClick={togglePlay} />)
+                            }
+                            <SkipNextIcon />
+                            <Box p={2} style={{color: '#17b717'}}>
+                                <Typography variant='body2'>
+                                    {(new Date(Math.ceil(audioCurrentTime) * 1000)).toISOString().substr(14,5)}
+                                </Typography>
+                            </Box>
+                            <ControlTime timeChange={timeChange} audioCurrentTime={audioCurrentTime} audioDuration={audioDuration} />
+                            <Box p={2}>
+                                <Typography variant='body2'>
+                                    {(new Date(Math.ceil(audioDuration) * 1000)).toISOString().substr(14,5)}
+                                </Typography>    
+                            </Box>
                         </Box>
-                        <ControlTime timeChange={timeChange} audioCurrentTime={audioCurrentTime} audioDuration={audioDuration} />
-                        <Box p={2}>
-                            <Typography variant='body2'>
-                                {(new Date(Math.ceil(audioDuration) * 1000)).toISOString().substr(14,5)}
-                            </Typography>    
-                        </Box>
-                    </Box>
+                    </Grid>
+                    <Grid item xs={'auto'} sm={1} md={'auto'} />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={4} sm={4} md={2} className='box-3'>
                     <Box className={classes.volume}>
                         {muted ? (<VolumeOffIcon onClick={toggleMute} />) : 
                             audioVolume === 0 ? (<VolumeMuteIcon onClick={toggleMute} />) :
-                            audioVolume > 0 && audioVolume <=0.4? (<VolumeDownIcon onClick={toggleMute} />):
+                            audioVolume > 0 && audioVolume <=0.4 ? (<VolumeDownIcon onClick={toggleMute} />):
                             audioVolume > 0.4 && audioVolume <=1 ? (<VolumeUpIcon onClick={toggleMute} />) : ''
                         }
                         <ControlVolume volumeChange={volumeChange} />
@@ -171,13 +238,14 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
 
     React.useEffect(
         ()=>{
+            controlStore.music_url || setIsShowing(false);
             const timer = setTimeout(()=>{
-                controlStore.base64 && setIsShowing(true);
+                controlStore.music_url && setIsShowing(true);
             },1000);
             return ()=>{
                 clearTimeout(timer);
             }
-        },[controlStore.base64]
+        },[controlStore.music_url]
     );
 
     return(
@@ -187,12 +255,29 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
             })}
             p={1}
         >
-            <Button 
-                className={classes.button}
-                onClick={()=>{setIsShowing(!isShowing)}}
-            >Toggle</Button>
             {
-                controlStore.base64 && <MyAudio base64={controlStore.base64}/>
+                controlStore.music_url && (<Button 
+                    variant='text'
+                    className={classes.button}
+                    onClick={()=>{setIsShowing(!isShowing)}}
+                >
+                    {
+                        (!isShowing ? (<ExpandLessIcon />) : (<ExpandMoreIcon />))
+                    }
+                </Button>)
+            }
+            
+
+            {
+                controlStore.music_url && 
+                    <MyAudio 
+                        key={controlStore.music_id}
+                        music_id={controlStore.music_id}
+                        music_name={controlStore.music_name}
+                        music_singer={controlStore.music_singer}
+                        music_url={controlStore.music_url}
+                        music_avatar_url={controlStore.music_avatar_url}
+                    />
             }
         </Box>
     )

@@ -22,25 +22,30 @@ interface SideBarProps{
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-        height: '100%',
-        position: 'relative',
-        width: 300,
+        width: 250,
         top: 0,
         left: 0,
+        position: 'absolute',
         padding: '30px 0',
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: theme.palette.background.paper,
         paddingBottom: 150,
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
     },
     content: {
         width: '100%',
         height: '100%',
+        '& h5': {
+            textAlign: 'center',
+        },
         '& .group':{
             color: 'white',
             textAlign: 'start',
             paddingLeft: 30,
-            margin: '40px 0',
+            margin: '20px 0',
             '& .items':{
                 fontSize: 15,
                 marginTop: 20,
@@ -114,7 +119,7 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
         <Box className={classes.root}>
             <Box className={classes.content}>
                 <Typography variant="h5" color="inherit" >
-                    <Link to='/' >MyMp3</Link>
+                    <Link to='/' style={{fontFamily: 'Zen Dots'}}>MyMp3</Link>
                 </Typography>
                 <Box className='group'>
                     <Typography variant='h6' color='textSecondary'>

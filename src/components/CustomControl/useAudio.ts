@@ -2,7 +2,7 @@ import React from 'react';
 
 const useAudio = (src: string) => {
 
-    const [audio] = React.useState(new Audio(src));
+    const [audio] = React.useState<HTMLAudioElement> (new Audio(src));
     const [playing, setPlaying] = React.useState<boolean>(false);
     const [audioCurrentTime, setAudioCurrentTime] = React.useState<number>(0);
     const [audioDuration, setAudioDuration] = React.useState<number>(0);
@@ -17,14 +17,23 @@ const useAudio = (src: string) => {
         setMuted(muted => !muted);
     }
 
+    const stopAudio = ()=>{
+        audio.pause();
+        audio.currentTime = 0;
+        // setAudio(null);
+        // setAudio(new Audio(src));
+        // console.log('changed');
+    }
+
     const onTimeUpdate = React.useCallback(()=>{
         setAudioCurrentTime(audio.currentTime);
+        console.log(audio.currentTime);
     },[]);
 
     const onLoad = ()=>{
         setAudioVolume(0.8);
         setAudioDuration(audio.duration);
-        setPlaying(true);
+        setTimeout(()=>setPlaying(true),1000);
     };
 
     const timeChange = React.useCallback((newTime: number)=>{
@@ -76,7 +85,7 @@ const useAudio = (src: string) => {
   
     return {
         playing, muted, audioCurrentTime, audioDuration, audioVolume,
-        togglePlay, timeChange, volumeChange, toggleMute
+        togglePlay, timeChange, volumeChange, toggleMute, stopAudio,
     };
 };
 

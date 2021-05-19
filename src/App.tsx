@@ -11,6 +11,9 @@ import {
 	ThemeOptions,
 } from "@material-ui/core";
 
+// FireBase
+import firebase from 'firebase';
+
 // app
 import { useAppSelector } from 'app/hooks'
 import { lightTheme, darkTheme } from './theme';
@@ -22,6 +25,19 @@ import SideBar from 'components/SideBar';
 
 // Routes
 import pages from './pages/routes';
+import BottomNavigationApp from 'components/BottomNavigation';
+
+
+
+
+// Configure Firebase.
+const config = {
+  apiKey: process.env.REACT_APP_FIREBASE_API,
+  authDomain:process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  // ...
+};
+firebase.initializeApp(config);
+
 
 const App: React.FC = ()=>{
 
@@ -32,6 +48,22 @@ const App: React.FC = ()=>{
 		darkMode ? setAppTheme(createMuiTheme(darkTheme)): setAppTheme(createMuiTheme(lightTheme));
 	},[darkMode]);
 
+
+	const [isSignedIn, setIsSignedIn] = React.useState(false); // Local signed-in state.
+
+	// Listen to the Firebase Auth state and set the local state.
+	React.useEffect(() => {
+		const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+		//   setIsSignedIn(!!user);
+			if(!user){
+				console.log('no user');
+				return;
+			}
+			console.log(user.displayName);
+		});
+		return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+	  }, []);
+
 	return (
 		<ThemeProvider theme={appTheme}>
 			<CssBaseline />
@@ -40,7 +72,8 @@ const App: React.FC = ()=>{
 					<CustomProgress />
 					<CustomControl />
 					<SideBar />
-					<Box style={{width: '100%', padding: '30px 40px 0 20px', display: 'flex', justifyContent: 'center'}}>
+					<BottomNavigationApp/>
+					<Box className='App-Content'>
 						<React.Suspense fallback={(<></>)}>
 								<Switch>
 									<Redirect exact to='/' from='/OverView'/>

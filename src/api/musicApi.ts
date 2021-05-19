@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const baseURL: string = 'https://mp3-project.herokuapp.com/';
+const baseURL: string = 'music/';
 
 const musicApi = {
   getAll: () => {
@@ -9,7 +9,11 @@ const musicApi = {
   },
 
   get: (id : string) => {
-    const url = baseURL;
+    const url = baseURL+id;
+    return axiosClient.get(url);
+  },
+  getPageLimit: (page : string, limit: string) => {
+    const url = baseURL+'?page='+page+'&limit='+limit;
     return axiosClient.get(url);
   },
 }

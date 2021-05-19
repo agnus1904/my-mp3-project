@@ -11,7 +11,6 @@ const ControlVolume: React.FC<Props> = (props):React.ReactElement=>{
     const [volumeValue, setVolumeValue] = React.useState<number | string | Array<number | string>>(80);
     const typeTimeoutRef = React.useRef<any>(null);
 
-    console.log('volume');
     const handleVolumeChange = (event: React.ChangeEvent<{}>, value: number | number[]) => {
         setVolumeValue(value);
         typeTimeoutRef.current && clearTimeout(typeTimeoutRef.current);

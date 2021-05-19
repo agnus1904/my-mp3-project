@@ -33,6 +33,7 @@ const CustomProgress: React.FC<Props> =(): React.ReactElement => {
     const progresser = useAppSelector(state => state.progress);
     const dispatch = useAppDispatch();
     const history = useHistory();
+    const pathNameRef = React.useRef<string | null>(history.location.pathname);
 
     const setCloseClick = ()=>{
         const action = setClose();
@@ -41,7 +42,8 @@ const CustomProgress: React.FC<Props> =(): React.ReactElement => {
 
 	React.useEffect(() => { 
 		return history.listen((location) => { 
-			if(location.pathname !== '/' ){
+			if(location.pathname !== '/' && location.pathname !== pathNameRef.current){
+                pathNameRef.current = location.pathname;
 				const action = setWaiting(location.pathname);
             	dispatch(action);
 			}

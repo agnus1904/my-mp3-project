@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     input: {
         backgroundColor: '#333',
-        padding: '0 15px',
+        padding: '0 10px 0 15px',
         borderRadius: 30,
     }
   }),

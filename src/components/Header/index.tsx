@@ -1,11 +1,11 @@
 import { Box, 
     Typography,
-    Switch as MaterialSwitch,
+    // Switch as MaterialSwitch,
 } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { setClose, setWaiting, setSuccess, setSuccessfalse } from 'app/slices/progressSlice';
-import { changeTheme } from 'app/slices/themeSilce';
+// import { setClose, setWaiting, setSuccess, setSuccessfalse } from 'app/slices/progressSlice';
+// import { changeTheme } from 'app/slices/themeSilce';
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
@@ -67,28 +67,28 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
     const dispatch = useAppDispatch();
     const history = useHistory();
 
-    // console.log('header render');
-    const changeDarkTheme = ()=>{
-        const action = changeTheme(!darkMode);
-        dispatch(action);
-    }
+    // // console.log('header render');
+    // const changeDarkTheme = ()=>{
+    //     const action = changeTheme(!darkMode);
+    //     dispatch(action);
+    // }
 
-    const setWaitingClick = ()=>{
-        const action = progresser.waiting ? setClose() : setWaiting(history.location.pathname);
-        dispatch(action);
-    }
+    // const setWaitingClick = ()=>{
+    //     const action = progresser.waiting ? setClose() : setWaiting(history.location.pathname);
+    //     dispatch(action);
+    // }
 
-    const setSuccessClick = ()=>{
-        const action = progresser.success ? setSuccessfalse() : setSuccess();
-        dispatch(action);
-    }
+    // const setSuccessClick = ()=>{
+    //     const action = progresser.success ? setSuccessfalse() : setSuccess();
+    //     dispatch(action);
+    // }
 
     return (
         <Box className={classes.root}>
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h5" color="inherit" >
-                        <Link to='' >MyMp3</Link>
+                        <Link to='' style={{fontFamily: 'Zen Dots'}}>MyMp3</Link>
                     </Typography>
                     <Typography variant='subtitle1' color='textPrimary'>
                         <Box className={classes.menu}>
@@ -106,7 +106,7 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
                 </Toolbar>
             </AppBar>
 
-            <Box
+            {/* <Box
                 style={{
                     position: 'fixed',
                     left: 0,
@@ -125,7 +125,7 @@ const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
                     checked={progresser.success}
                     onChange={setSuccessClick}
                 />
-            </Box>
+            </Box> */}
         </Box>
     );
 };

@@ -3,11 +3,11 @@ import { Box,
     // Switch as MaterialSwitch,
 } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+// import { useAppDispatch, useAppSelector } from 'app/hooks';
 // import { setClose, setWaiting, setSuccess, setSuccessfalse } from 'app/slices/progressSlice';
 // import { changeTheme } from 'app/slices/themeSilce';
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
@@ -52,20 +52,23 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     },
     menuLeft:{
-        borderRight: '2px solid #EEE'
+        
     },
     menuRight:{
-
+        borderLeft: '2px solid #EEE',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none',
+        },
     }
   }),
 );
 
 const Header:React.FC<HeaderProps> =(props) :React.ReactElement => {
     const classes = useStyles();
-    const darkMode = useAppSelector(state => state.darkMode.value);
-    const progresser = useAppSelector(state => state.progress);
-    const dispatch = useAppDispatch();
-    const history = useHistory();
+    // const darkMode = useAppSelector(state => state.darkMode.value);
+    // const progresser = useAppSelector(state => state.progress);
+    // const dispatch = useAppDispatch();
+    // const history = useHistory();
 
     // // console.log('header render');
     // const changeDarkTheme = ()=>{

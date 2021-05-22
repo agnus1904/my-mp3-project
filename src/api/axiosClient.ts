@@ -1,6 +1,9 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+// import 'firebase/database'; // If using Firebase database
+// import 'firebase/storage';  // If using Firebase storage
+import 'firebase/auth';
 
 const getFirebaseToken = async () => {
   const currentUser = firebase.auth().currentUser;
@@ -12,8 +15,6 @@ const getFirebaseToken = async () => {
 //   console.log(test);
   const hasRememberedAccount = localStorage.getItem('remember_firebase_account');
   if (!hasRememberedAccount) { console.log('no account'); return null};
-
-  console.log(hasRememberedAccount, 'account is login');
 
   // Logged in but current user is not fetched --> wait (10s)
   return new Promise((resolve, reject) => {

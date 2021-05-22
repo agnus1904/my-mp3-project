@@ -4,16 +4,16 @@ import { makeStyles, Theme, createStyles, useTheme } from '@material-ui/core/sty
 import CustomInput from 'components/CustomInput';
 import { Formik } from 'formik';
 import SearchIcon from '@material-ui/icons/Search';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MenuIcon from '@material-ui/icons/Menu';
+// import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import MenuIcon from '@material-ui/icons/Menu';
 
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
+// import Grow from '@material-ui/core/Grow';
+// import Paper from '@material-ui/core/Paper';
+// import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+// import MenuList from '@material-ui/core/MenuList';
+// import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { useAppSelector } from 'app/hooks';
 
 import Menu from '@material-ui/core/Menu';
@@ -22,8 +22,11 @@ import Fade from '@material-ui/core/Fade';
 
 // FireBase 
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
-import firebase from 'firebase';
+// import FirebaseAuth from 'react-firebaseui/FirebaseAuth';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
+import { Link } from 'react-router-dom';
 
 interface MyFormValues {
     name: String
@@ -51,6 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
         zIndex: 5,
         [theme.breakpoints.down('sm')]: {
             margin: '10px 0 0 0',
+            width: '100%',
+            justifyContent: 'space-between',
         },
         '& .avatar':{
             width: 30,
@@ -65,6 +70,8 @@ const useStyles = makeStyles((theme: Theme) =>
             cursor: 'pointer',
             height: '100%',
             textTransform: 'none',
+            padding: 0,
+            minWidth: 0,
             '& .account-name':{
                 minWidth: 100,
             },
@@ -81,9 +88,10 @@ const HomeHeader:React.FC<Props> =(props):React.ReactElement => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const rememberAccount = useAppSelector(state=>state.account);
-    const [ showSidebar, setShowSidebar ] = React.useState(false);
+    
+    // const [ showSidebar, setShowSidebar ] = React.useState(false);
 
-    const anchorRef = React.useRef<HTMLButtonElement>(null);
+    // const anchorRef = React.useRef<HTMLButtonElement>(null);
 
     const classes= useStyles();
     const {
@@ -111,47 +119,57 @@ const HomeHeader:React.FC<Props> =(props):React.ReactElement => {
         <Box className={classes.root}>
             <Grid container >
                 <Grid container item xs={12} md={6} className={classes.form}>
+                        {isMobile &&
+                            <Typography variant="h6" color="inherit" >
+                                <Link to='/' style={{fontFamily: 'Zen Dots'}}>MyMp3</Link>
+                            </Typography>
+                        }
                     <Formik 
                         initialValues={initialValue}
                         onSubmit={onSubmit}
                     >
-                        {({values, handleChange, handleBlur, handleSubmit})=>(
+                        {({
+                            // values, handleChange, handleBlur, 
+                            handleSubmit})=>(
                             <form onSubmit={handleSubmit}>
-                                <CustomInput 
+                                {!isMobile && <CustomInput 
                                     type='input'
                                     name='name'
                                     placeholder='Search for music'
                                     start={SearchIcon}
-                                />
+                                />}
                             </form>
                         )}
                     </Formik>
                 </Grid>
                 <Grid container item xs={12} md={6} justify="flex-end">
                     <Box className={classes.account}>
-                        <Box className='avatar' 
-                            style={{backgroundImage: rememberAccount.photo ? 
-                                `url(${rememberAccount.photo})` : 
-                                undefined
-                            }}
-                        />
+                        <Typography >
+                            {isMobile &&  'Hi'+(rememberAccount.email? ', ' : '')}
+                            {rememberAccount.email && rememberAccount.name}
+                        </Typography>
                         <Button
                                 className='icon' 
                                 aria-controls="fade-menu" 
                                 aria-haspopup="true"
                                 onClick={handleClick}
-
-                                // onClick={handleToggle}
-                                // ref={anchorRef}
-                                // aria-controls={open ? 'menu-list-grow' : undefined}
-                                // aria-haspopup="true"
                             >
-                                <Typography variant='subtitle1' className='account-name'>
-                                    {rememberAccount.name}
-                                </Typography>
-                                {
-                                    open ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)
+                                <Box className='avatar' 
+                                    style={{backgroundImage: rememberAccount.photo ? 
+                                        `url(${rememberAccount.photo})` : 
+                                        undefined
+                                    }}
+                                />
+                                {/* {
+                                    isMobile || <Typography variant='subtitle1' className='account-name'>
+                                        {rememberAccount.name}
+                                        {
+                                            open ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)
+                                        }
+                                    </Typography>
                                 }
+                                 */}
+                                
                         </Button>
                         <Menu
                             id="fade-menu"

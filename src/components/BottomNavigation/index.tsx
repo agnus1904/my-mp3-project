@@ -35,7 +35,7 @@ const BottomNavigationApp:React.FC<Props> =(props):React.ReactElement => {
 
     const classes = useStyles();
     const  history = useHistory();
-    
+
     const [value, setValue] = React.useState(history.location.pathname);
 
     return (

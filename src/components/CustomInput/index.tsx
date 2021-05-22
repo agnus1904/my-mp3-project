@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const CustomInput:React.FC<FieldAttributes<Props>> =({placeholder,... props}):React.ReactElement =>{
+const CustomInput:React.FC<FieldAttributes<Props>> =(props):React.ReactElement =>{
 
     const classes = useStyles()
     const [field, meta] = useField<Props>(props);
@@ -32,7 +32,7 @@ const CustomInput:React.FC<FieldAttributes<Props>> =({placeholder,... props}):Re
         <FormControl className={classes.root}>
             <TextField 
                 className={classes.input}
-                placeholder={placeholder}
+                placeholder={props.placeholder}
                 {...field}
                 helperText={errorText}
                 InputProps={{

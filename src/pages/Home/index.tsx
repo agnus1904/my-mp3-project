@@ -3,7 +3,7 @@ import React from 'react';
 // App  
 import musicApi from 'api/musicApi';
 import { useAppDispatch } from 'app/hooks'
-import { setSuccess, setWaiting } from 'app/slices/progressSlice';
+import { setSuccess, setWaiting, progressWaiting } from 'app/slices/progressSlice';
 import { setClose, setOpen } from 'app/slices/controlSlice';
 
 // Package 
@@ -11,8 +11,9 @@ import { useLocation } from 'react-router';
 import { Box } from '@material-ui/core';
 
 // FireBase 
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from 'firebase';
+// import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 // Components 
 import HomeHeader from './HomeHeader';
@@ -70,47 +71,58 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
     // function in banner 
     const fetchMusic = async (object: any)=>{
-        dispatch(setClose());
+        
+        // console.log(setClose,setOpen);
 
-        setTimeout(()=>{
-            dispatch(setOpen(object));
-        },1000);
-        // action to progress store 
-        dispatch(setSuccess());
-    }
-
-    console.log(data);
-
-    const fetchMusicBanner = async ()=>{
-        isMountedRef.current = true;
-        dispatch(setWaiting(location.pathname));
-        try {
-            const response = await musicApi.getPageLimit('1', '4');
-            const res = await response.data;
-            if(isMountedRef.current){
-                // action to progress store 
-                dispatch(setSuccess());
-
-                // set data have been fetched
-                setData(res);
-            }
-        }catch(error) {
-            console.log('error', error);
+        const params = {
+            path: location.pathname+object.music_url,
+            actions: [
+                {
+                    action: setClose,
+                    params: undefined
+                },
+                {
+                    action: setOpen,
+                    params: object,
+                }
+            ]
         }
+
+        await dispatch(progressWaiting(params));
+
+        // dispatch(setClose());
+        
+        // dispatch(setOpen(object));
+
+        // action to progress store 
+        // dispatch(setSuccess());
+        // setTimeout(()=>dispatch(setSuccess()), 1000);
     }
 
     React.useEffect(
         ()=>{
+            const fetchMusicBanner = async ()=>{
+                isMountedRef.current = true;
+                dispatch(setWaiting(location.pathname));
+                try {
+                    const response: any = await musicApi.getPageLimitLocal(1,4);
+                    const res = await response.data;
+                    if(isMountedRef.current){
+                        // action to progress store 
+                        dispatch(setSuccess());
+        
+                        // set data have been fetched
+                        setData(res);
+                    }
+                }catch(error) {
+                    console.log('error', error);
+                }
+            }
             fetchMusicBanner();
-            const timer = setTimeout(()=>{
-                const actionSuccess = setSuccess();
-                dispatch(actionSuccess);
-            }, 1000);
             return ()=>{
-                clearTimeout(timer);
                 isMountedRef.current= false;
             };
-        },[]
+        },[dispatch, location.pathname]
     );
 
     React.useEffect(()=>{
@@ -118,9 +130,7 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
             const actionSuccess = setSuccess();
             dispatch(actionSuccess);
         }
-    },[]);
-
-
+    },[data, dispatch]);
 
     return (
         <Box style={{width: '100%', maxWidth: '1000px'}}>

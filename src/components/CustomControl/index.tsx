@@ -36,10 +36,15 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '15px 15px 0 0',
         display: 'flex',
         alignItems: 'center',
+        marginRight: 15,
         transition: 'all 0.5s ease-in-out',
         [theme.breakpoints.down('sm')]: {
-            height: 150,
+            height: 160,
             bottom: 50,
+        },
+        [theme.breakpoints.down('sm')]: {
+            height: 160,
+            bottom: 40,
         },
         '& .box-1':{
             [theme.breakpoints.down('sm')]: {
@@ -58,7 +63,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     },
     rootShow:{
-        bottom: -95,
+        bottom: -75,
+        [theme.breakpoints.down('sm')]: {
+            bottom: -105,
+        },
+        // [theme.breakpoints.down('xs')]: {
+        //     bottom: -115,
+        // },
     },
     button: {
         cursor: 'pointer',
@@ -71,24 +82,37 @@ const useStyles = makeStyles((theme: Theme) =>
         height: '100%',
         paddingLeft: 20,
         display: 'flex',
+        paddingBottom: 5,
         [theme.breakpoints.down('sm')]: {
-            padding: '10px 0 10px 0px',
+            padding: '0px 0 0px 0px',
         },
         [theme.breakpoints.down('xs')]: {
-            padding: '10px 0 10px 10px',
+            padding: '0px 0 0px 10px',
         },
         '& .info-image':{
             width: 50,
             height: 50,
             backgroundColor: 'black',
             borderRadius: 5,
-            marginRight: 15,
+            marginRight: 25,
             marginTop: 5,
             backgroundSize: 'cover',
-            backgroundPosition: 'center'
+            backgroundPosition: 'center',
+            [theme.breakpoints.down('xs')]: {
+                marginTop: 0,
+                marginRight: 10,
+            },
         },
         '& .info-text':{
             textAlign: 'start',
+            [theme.breakpoints.down('xs')]: {
+                '& .MuiTypography-body1':{
+                    fontSize: 15,
+                },
+                '& .MuiTypography-body2':{
+                    fontSize: 12,
+                },
+            },
         },
     },
     control: {
@@ -157,7 +181,6 @@ const  MyAudio: React.FC<MyAudioProps> = (props):React.ReactElement=>{
         music_url,
         music_avatar_url
     } = props;
-
     
     const {
         playing, muted, audioCurrentTime, audioDuration, audioVolume,
@@ -165,16 +188,16 @@ const  MyAudio: React.FC<MyAudioProps> = (props):React.ReactElement=>{
     } = useAudio(music_url);
     
     React.useEffect(()=>{
-        return()=>{
+        return ()=>{
             stopAudio();
         }
-    },[]);
+    },[stopAudio]);
 
     return(
         <>
             <Grid container>
                 <Grid item xs={'auto'} sm={1} md={'auto'}/>
-                <Grid item xs={8} sm={6} md={3} className='box-1' >
+                <Grid item xs={8} sm={6} md={4} className='box-1' >
                     <Box className={classes.info}>
                         <Box className='info-image' style={{backgroundImage: `url(${music_avatar_url})` }}/>
                         <Box className='info-text'>
@@ -187,7 +210,7 @@ const  MyAudio: React.FC<MyAudioProps> = (props):React.ReactElement=>{
                         </Box>
                     </Box>
                 </Grid>
-                <Grid item container xs={12} sm={12} md={7} className='box-2'>
+                <Grid item container xs={12} sm={12} md={6} className='box-2'>
                     <Grid item xs={'auto'} sm={1} md={'auto'} />
                     <Grid item xs={12} sm={10} md={12} >
                         <Box className={classes.control}>

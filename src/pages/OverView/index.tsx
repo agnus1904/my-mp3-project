@@ -24,6 +24,13 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        padding: '0 120px',
+        [theme.breakpoints.down('sm')]: {
+            padding: '0 90px',
+        },
+        [theme.breakpoints.down('xs')]: {
+            padding: '0 40px',
+        },
     },
     overPlay: {
         position: 'absolute',
@@ -43,6 +50,18 @@ const useStyles = makeStyles((theme: Theme) =>
     textBox:{
         textAlign: 'start',
         fontWeight: 600,
+        [theme.breakpoints.down('sm')]: {
+            '& h1':{
+                fontSize: 80,
+                lineHeight: '100px',
+            },
+        },
+        [theme.breakpoints.down('xs')]: {
+            '& h1':{
+                fontSize: 60,
+                lineHeight: '70px',
+            }
+        },
         '& .MuiButtonBase-root':{
             backgroundColor: '#da5100',
             color: 'white',
@@ -71,7 +90,6 @@ const OverView:React.FC<OverViewProps> =(props) :React.ReactElement => {
                     <Typography variant='h6' >
                         We are live and have a millions of your favorite songs <br/>
                         just in a place
-                        
                     </Typography>
                     <br/>
                     <Link to='/home' >

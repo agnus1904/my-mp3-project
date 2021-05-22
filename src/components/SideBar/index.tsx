@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
         width: 250,
         top: 0,
         left: 0,
+        minHeight: 'fit-content',
         position: 'absolute',
         padding: '30px 0',
         display: 'flex',
@@ -37,7 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
         width: '100%',
-        height: '100%',
         '& h5': {
             textAlign: 'center',
         },
@@ -130,8 +130,8 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                             menu.map((item, index)=>(
                                 <Box 
                                     className={clsx('item' , {
-                                        ['item-picked']: location.pathname === item.path,
-                                    })}
+                                        'item-picked': location.pathname === item.path,
+                                    })} 
                                     key={index}
                                 >
                                     <Box component={item.icon}/>
@@ -150,7 +150,7 @@ const SideBar:React.FC<SideBarProps> =(props) :React.ReactElement => {
                             library.map((item, index)=>(
                                 <Box
                                     className={clsx('item' , {
-                                        ['item-picked']: location.pathname === item.path,
+                                        'item-picked': location.pathname === item.path,
                                     })}
                                     key={index}
                                 >

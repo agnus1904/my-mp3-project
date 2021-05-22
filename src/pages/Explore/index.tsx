@@ -22,7 +22,7 @@ const Explore:React.FC<ExploreProps> =(props) :React.ReactElement => {
             return ()=>{
                 clearTimeout(timer);
             }
-        },[]
+        },[dispatch]
     );
 
     return (

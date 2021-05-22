@@ -10,11 +10,13 @@ interface Props {
 const ControlTime: React.FC<Props> = (props):React.ReactElement=>{
 
     const { timeChange, audioDuration, audioCurrentTime } = props;
-    const [timeValue, setTimeValue] = React.useState<number | string | Array<number | string>>(0);
+    const [ timeValue, setTimeValue] = React.useState<boolean>(true);
     const typeTimeoutRef = React.useRef<any>(null);
+    const typeCurrentTime = React.useRef<any>(0);
 
     const handleTimeChange = (event: React.ChangeEvent<{}>, value: number | number[]) => {
-        setTimeValue(value);
+        setTimeValue(!timeValue);
+        typeCurrentTime.current = value;
         typeTimeoutRef.current && clearTimeout(typeTimeoutRef.current);
 
         typeTimeoutRef.current = setTimeout(
@@ -25,18 +27,19 @@ const ControlTime: React.FC<Props> = (props):React.ReactElement=>{
         );
     };
 
-    React.useEffect(
-        ()=>{
-            if(!typeTimeoutRef.current){
-                audioCurrentTime===0 ? setTimeValue(0) : 
-                setTimeValue(audioCurrentTime/audioDuration*100);
-            }
-        }, [audioCurrentTime]
-    );
+    React.useEffect(()=>{
+        if(!typeTimeoutRef.current){
+            typeCurrentTime.current = audioCurrentTime===0 ? 0 :  audioCurrentTime/audioDuration*100;
+        }
+    });
 
-    const formatTime: (value: number)=>string = (value)=>(
-        (new Date(Math.ceil((value*audioDuration)/100) * 1000)).toISOString().substr(14,5)
-    )
+    const formatTime: (value: number)=>string = (value)=>
+        {
+            // console.log(value);
+            // return '12';
+            return (new Date(Math.ceil((value*audioDuration)/100) * 1000)).toISOString().substr(14,5)
+        }
+    
   
     return(
         <>
@@ -45,7 +48,7 @@ const ControlTime: React.FC<Props> = (props):React.ReactElement=>{
                 aria-labelledby="discrete-slider-small-steps"
                 getAriaValueText={formatTime}
                 valueLabelFormat={formatTime}
-                value={typeof timeValue === 'number' ? timeValue : 0}
+                value={typeof typeCurrentTime.current  === 'number' ? typeCurrentTime.current  : 0}
                 onChange={handleTimeChange}
             />
         </>

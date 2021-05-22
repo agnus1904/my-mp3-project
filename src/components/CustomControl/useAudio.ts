@@ -2,7 +2,7 @@ import React from 'react';
 
 const useAudio = (src: string) => {
 
-    const [audio] = React.useState<HTMLAudioElement> (new Audio(src));
+    const [audio] = React.useState<HTMLAudioElement>(new Audio(src));
     const [playing, setPlaying] = React.useState<boolean>(false);
     const [audioCurrentTime, setAudioCurrentTime] = React.useState<number>(0);
     const [audioDuration, setAudioDuration] = React.useState<number>(0);
@@ -17,28 +17,26 @@ const useAudio = (src: string) => {
         setMuted(muted => !muted);
     }
 
-    const stopAudio = ()=>{
+    const stopAudio: ()=>void = 
+    React.useCallback(()=>{
         audio.pause();
         audio.currentTime = 0;
-        // setAudio(null);
-        // setAudio(new Audio(src));
-        // console.log('changed');
-    }
+    },[audio]);
 
-    const onTimeUpdate = React.useCallback(()=>{
-        setAudioCurrentTime(audio.currentTime);
-        console.log(audio.currentTime);
-    },[]);
+    const onTimeUpdate: ()=>void = 
+    React.useCallback(()=>{
+        setAudioCurrentTime(audio.currentTime)}
+    ,[setAudioCurrentTime, audio]);
 
-    const onLoad = ()=>{
+    const onLoad = React.useCallback(()=>{
         setAudioVolume(0.8);
         setAudioDuration(audio.duration);
         setTimeout(()=>setPlaying(true),1000);
-    };
+    },[audio]);
 
     const timeChange = React.useCallback((newTime: number)=>{
         audio.currentTime = newTime*audio.duration/100;
-    },[]);
+    },[audio]);
 
     const volumeChange = React.useCallback((newVolume: number)=>{
         setAudioVolume(newVolume/100);
@@ -62,15 +60,15 @@ const useAudio = (src: string) => {
         }else{
             audio.pause();
         }
-    },[playing]);
+    },[playing, audio]);
 
     React.useEffect(() => {
         muted ? audio.muted=true : audio.muted=false;
-    },[muted]);
+    },[muted, audio]);
 
     React.useEffect(() => {
         audio.volume = audioVolume;
-    },[audioVolume]);
+    },[audioVolume, audio]);
 
     React.useEffect(() => {
       audio.addEventListener('ended', () => setPlaying(false));
@@ -81,7 +79,7 @@ const useAudio = (src: string) => {
         audio.removeEventListener('timeupdate',  onTimeUpdate);
         audio.removeEventListener('loadedmetadata', onLoad);
       };
-    }, []);
+    }, [audio, onLoad, onTimeUpdate]);
   
     return {
         playing, muted, audioCurrentTime, audioDuration, audioVolume,

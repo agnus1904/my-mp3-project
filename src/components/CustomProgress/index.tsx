@@ -35,10 +35,10 @@ const CustomProgress: React.FC<Props> =(): React.ReactElement => {
     const history = useHistory();
     const pathNameRef = React.useRef<string | null>(history.location.pathname);
 
-    const setCloseClick = ()=>{
+    const setCloseClick = React.useCallback(()=>{
         const action = setClose();
         dispatch(action);
-    }
+    },[dispatch]);
 
 	React.useEffect(() => { 
 		return history.listen((location) => { 
@@ -47,21 +47,21 @@ const CustomProgress: React.FC<Props> =(): React.ReactElement => {
 				const action = setWaiting(location.pathname);
             	dispatch(action);
 			}
-		}) 
-	 }, [history])
+		})
+	 }, [history, dispatch]);
 
 	React.useEffect(()=>{
 		if(history.location.pathname!=='/'){
 			const action = setWaiting(history.location.pathname);
 			dispatch(action);
 		};
-	},[]);
+	},[dispatch, history.location.pathname]);
 
     return (
         <Box className={classes.root}>
             {
                 (progresser.waiting) && 
-                    (<Progresser key={progresser.path} success={progresser.success} setCloseClick={setCloseClick} />)
+                    (<Progresser key={progresser.path} waiting={progresser.waiting} success={progresser.success} setCloseClick={setCloseClick} />)
             }
         </Box>
     );

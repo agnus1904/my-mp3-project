@@ -18,10 +18,10 @@ const BorderLinearProgress = withStyles((theme: Theme) =>
   }),
 )(LinearProgress);
 
-const Progresser: React.FC<{success : boolean, setCloseClick: ()=>void}> = (props)=>{
+const Progresser: React.FC<{waiting: boolean, success : boolean, setCloseClick: ()=>void}> = (props)=>{
 
     const [progress, setProgress] = React.useState(0);
-    const { success, setCloseClick } = props;
+    const { waiting, success, setCloseClick } = props;
     const timerRefInter = React.useRef<any>(null);
     const timerRefTimeout = React.useRef<any>(null);
 
@@ -29,8 +29,7 @@ const Progresser: React.FC<{success : boolean, setCloseClick: ()=>void}> = (prop
         ()=>{
             timerRefTimeout.current && clearTimeout(timerRefTimeout.current);
             timerRefInter.current && clearInterval(timerRefInter.current);
-
-            if(success===true){
+            if(success === true && waiting === true){
                 timerRefInter.current = setInterval(()=>{
                     setProgress((prevProgress)=>{
                         if(prevProgress <100){
@@ -40,20 +39,19 @@ const Progresser: React.FC<{success : boolean, setCloseClick: ()=>void}> = (prop
                             return prevProgress;
                         }
                     });
-                }, 50);
-    
+                }, 25);
                 timerRefTimeout.current = setTimeout(
                     ()=>{
                         clearInterval(timerRefInter.current);
                         setCloseClick();
-                }, 1500);
+                }, 750);
             };
             
             return () => {
                 timerRefTimeout.current && clearTimeout(timerRefTimeout.current);
                 timerRefInter.current && clearInterval(timerRefInter.current);
             };
-        }, [success]
+        }, [success, setCloseClick, waiting]
     );
 
     React.useEffect(() => {
@@ -75,11 +73,11 @@ const Progresser: React.FC<{success : boolean, setCloseClick: ()=>void}> = (prop
                     }
                 }
             );
-        }, 350);
+        }, 250);
         timerRefTimeout.current = setTimeout(
             ()=>{
                 clearInterval(timerRefInter.current);
-        }, 3500);
+        }, 2500);
         return () => {
             timerRefTimeout.current && clearTimeout(timerRefTimeout.current);
             timerRefInter.current && clearInterval(timerRefInter.current);

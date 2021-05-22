@@ -1,5 +1,40 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+const { createAsyncThunk } = require("@reduxjs/toolkit");
+
+interface  paramsProps {
+    path: string,
+    actions: {
+        action:any,
+        params: any
+    }[];
+}
+
+export const progressWaiting = createAsyncThunk('progress/wating', async (params: paramsProps, thunkAPI: any) => {
+
+    // start waiting 
+    thunkAPI.dispatch(setWaiting(params.path));
+
+    // settimeout 1sec
+    let timer:  NodeJS.Timeout | null =  setTimeout(()=>{
+        timer=null;
+    },1000);
+
+    // dispatch each action  
+    await params.actions.reduce(async(a: any, b: any)=>{
+        await a;
+        await thunkAPI.dispatch(b.action(b.params));
+    },  undefined);
+
+    // if timeut still counting 
+    timer && await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // end waiting 
+    thunkAPI.dispatch(setSuccess())
+    return;
+
+});
+
 // Define a type for the slice state
 interface progressState {
     waiting: boolean,
@@ -39,6 +74,10 @@ const progressSlice = createSlice({
             state.path = null;
         },
     },
+    extraReducers: {
+        [progressWaiting.fulfilled]: () => {
+        },
+      }
 })
 
 export const { setWaiting, setClose, setSuccess, setSuccessfalse } = progressSlice.actions

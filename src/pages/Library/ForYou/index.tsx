@@ -1,20 +1,20 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+// import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {useAppDispatch} from 'app/hooks'
 import { setSuccess } from 'app/slices/progressSlice';
 
 interface Props{
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-    },
-  }),
-);
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     root: {
+//     },
+//   }),
+// );
 
-const ForYou:React.FC<Props> =(props):React.ReactElement =>{
+const ForYou:React.FC<Props> =():React.ReactElement =>{
 
     const dispatch = useAppDispatch();
 
@@ -27,7 +27,7 @@ const ForYou:React.FC<Props> =(props):React.ReactElement =>{
             return ()=>{
                 clearTimeout(timer);
             }
-        },[]
+        },[dispatch]
     );
 
     return (

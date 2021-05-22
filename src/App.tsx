@@ -12,7 +12,8 @@ import {
 } from "@material-ui/core";
 
 // FireBase
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 // app
 import { useAppSelector } from 'app/hooks'
@@ -49,17 +50,16 @@ const App: React.FC = ()=>{
 	},[darkMode]);
 
 
-	const [isSignedIn, setIsSignedIn] = React.useState(false); // Local signed-in state.
+	// const [isSignedIn, setIsSignedIn] = React.useState(false); // Local signed-in state.
 
 	// Listen to the Firebase Auth state and set the local state.
 	React.useEffect(() => {
+		console.log("No Warning here. Thanks");
 		const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
 		//   setIsSignedIn(!!user);
 			if(!user){
-				console.log('no user');
 				return;
 			}
-			console.log(user.displayName);
 		});
 		return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
 	  }, []);

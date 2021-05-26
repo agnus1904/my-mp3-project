@@ -75,8 +75,6 @@ const progressSlice = createSlice({
         },
     },
     extraReducers: {
-        [progressWaiting.fulfilled]: () => {
-        },
       }
 })
 

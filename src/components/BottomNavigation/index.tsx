@@ -37,6 +37,16 @@ const BottomNavigationApp:React.FC<Props> =(props):React.ReactElement => {
     const  history = useHistory();
 
     const [value, setValue] = React.useState(history.location.pathname);
+    const pathNameRef = React.useRef<string | null>(history.location.pathname);
+
+    React.useEffect(() => { 
+		return history.listen((location) => { 
+			if(location.pathname !== pathNameRef.current){
+                pathNameRef.current = location.pathname;
+                setValue(location.pathname);
+			}
+		})
+	 }, [history]);
 
     return (
         <BottomNavigation
@@ -44,7 +54,6 @@ const BottomNavigationApp:React.FC<Props> =(props):React.ReactElement => {
             onChange={(event, newValue) => {
                 setValue(newValue);
                 history.push(newValue);
-                console.log(newValue);
             }}
             showLabels
             className={classes.root}

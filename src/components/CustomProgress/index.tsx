@@ -37,7 +37,12 @@ const CustomProgress: React.FC<Props> =(): React.ReactElement => {
 
     const setCloseClick = React.useCallback(()=>{
         const action = setClose();
-        dispatch(action);
+        const timer = setTimeout(()=>{
+            dispatch(action);
+        },300);
+        return ()=>{
+            clearTimeout(timer);
+        }
     },[dispatch]);
 
 	React.useEffect(() => { 

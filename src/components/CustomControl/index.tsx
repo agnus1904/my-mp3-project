@@ -26,7 +26,7 @@ import ControlVolume from './ControlVolume';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-        width: '100%',
+        width: 'calc(100vw - 15px)',
         height: 80,
         backgroundColor: '#444',
         zIndex: 15,
@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
         borderRadius: '15px 15px 0 0',
         display: 'flex',
         alignItems: 'center',
-        marginRight: 15,
         transition: 'all 0.5s ease-in-out',
         [theme.breakpoints.down('sm')]: {
             height: 160,
@@ -261,17 +260,18 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
 
     React.useEffect(
         ()=>{
-            controlStore.music_url || setIsShowing(false);
+            controlStore.data.music_url || setIsShowing(false);
             const timer = setTimeout(()=>{
-                controlStore.music_url && setIsShowing(true);
+                controlStore.data.music_url && setIsShowing(true);
             },1000);
             return ()=>{
                 clearTimeout(timer);
             }
-        },[controlStore.music_url]
+        },[controlStore.data.music_url]
     );
 
     return(
+        // <>
         <Box
             className={clsx(classes.root, {
                 [classes.rootShow]: isShowing === false,
@@ -279,7 +279,7 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
             p={1}
         >
             {
-                controlStore.music_url && (<Button 
+                controlStore.data.music_url && (<Button 
                     variant='text'
                     className={classes.button}
                     onClick={()=>{setIsShowing(!isShowing)}}
@@ -292,14 +292,14 @@ const CustomControl: React.FC<CustomControlProps> = ()=>{
             
 
             {
-                controlStore.music_url && 
+                controlStore.data.music_url && 
                     <MyAudio 
-                        key={controlStore.music_id}
-                        music_id={controlStore.music_id}
-                        music_name={controlStore.music_name}
-                        music_singer={controlStore.music_singer}
-                        music_url={controlStore.music_url}
-                        music_avatar_url={controlStore.music_avatar_url}
+                        key={controlStore.id}
+                        music_id={controlStore.id}
+                        music_name={controlStore.data.music_name}
+                        music_singer={controlStore.data.music_singer}
+                        music_url={controlStore.data.music_url}
+                        music_avatar_url={controlStore.data.music_avatar_url}
                     />
             }
         </Box>

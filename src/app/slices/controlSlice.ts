@@ -2,22 +2,26 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
 interface ControlState {
-  music_id: string | null,
-  music_name: string | null,
-  music_singer: string | null,
-  music_url: string | null,
-  music_avatar_url: string | null,
-  music_banner_url: string | null
+    id: string | null,
+    data: {
+        music_name: string | null,
+        music_singer: string | null,
+        music_url: string | null,
+        music_avatar_url: string | null,
+        music_banner_url: string | null
+    }
 }
 
 // Define the initial state using that type
 const initialState: ControlState = {
-  music_id: null,
-  music_name: null,
-  music_singer: null,
-  music_url: null,
-  music_avatar_url: null,
-  music_banner_url: null,
+    id: null,
+    data: {
+        music_name: null,
+        music_singer: null,
+        music_url: null,
+        music_avatar_url: null,
+        music_banner_url: null,
+    }
 }
 
 const controlSlice = createSlice({
@@ -26,20 +30,20 @@ const controlSlice = createSlice({
   initialState : initialState,
   reducers: {
     setOpen: (state, action: PayloadAction<any>) => {
-      state.music_id = action.payload.music_id;
-      state.music_name = action.payload.music_name;
-      state.music_singer = action.payload.music_singer;
-      state.music_url= action.payload.music_url;
-      state.music_avatar_url = action.payload.music_avatar_url;
-      state.music_banner_url= action.payload.music_banner_url;
+      state.id = action.payload.id;
+      state.data.music_name = action.payload.data.music_name;
+      state.data.music_singer = action.payload.data.music_singer;
+      state.data.music_url= action.payload.data.music_url;
+      state.data.music_avatar_url = action.payload.data.music_avatar_url;
+      state.data.music_banner_url= action.payload.data.music_banner_url;
     },
     setClose: (state) => {
-      state.music_id = null;
-      state.music_name = null;
-      state.music_singer = null;
-      state.music_url=null;
-      state.music_avatar_url = null;
-      state.music_banner_url= null;
+      state.id = null;
+      state.data.music_name = null;
+      state.data.music_singer = null;
+      state.data.music_url=null;
+      state.data.music_avatar_url = null;
+      state.data.music_banner_url= null;
     },
   },
 })

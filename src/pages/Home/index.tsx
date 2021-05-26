@@ -1,9 +1,8 @@
 import React from 'react';
 
 // App  
-import musicApi from 'api/musicApi';
 import { useAppDispatch } from 'app/hooks'
-import { setSuccess, setWaiting, progressWaiting } from 'app/slices/progressSlice';
+import { setSuccess, progressWaiting } from 'app/slices/progressSlice';
 import { setClose, setOpen } from 'app/slices/controlSlice';
 
 // Package 
@@ -14,6 +13,7 @@ import { Box } from '@material-ui/core';
 // import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 // Components 
 import HomeHeader from './HomeHeader';
@@ -28,7 +28,6 @@ interface HomeProps{
 }
 
 
-
 const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
     const dispatch = useAppDispatch();
@@ -36,21 +35,19 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
     const location = useLocation()
     const isMountedRef = React.useRef(true);
 
+    const db = firebase.firestore();
+
     // Configure FirebaseUI.
     const uiConfig = {
-        // Popup signin flow rather than redirect flow.
         signInFlow: 'popup',
-        // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    //   signInSuccessUrl: '/home',
-        // We will display Google and Facebook as auth providers.
         signInOptions: [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        //   firebase.auth.FacebookAuthProvider.PROVIDER_ID
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         ],
         callbacks: {
         // Avoid redirects after sign-in.
             signInSuccessWithAuthResult: (authResult: any) => {
                 const remember_firebase_account = {
+                    id: authResult.user.uid,
                     name: authResult.user.displayName,
                     photo: authResult.user.photoURL,
                     email:  authResult.user.email,
@@ -71,9 +68,6 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
 
     // function in banner 
     const fetchMusic = async (object: any)=>{
-        
-        // console.log(setClose,setOpen);
-
         const params = {
             path: location.pathname+object.music_url,
             actions: [
@@ -87,42 +81,36 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
                 }
             ]
         }
-
         await dispatch(progressWaiting(params));
-
-        // dispatch(setClose());
-        
-        // dispatch(setOpen(object));
-
-        // action to progress store 
-        // dispatch(setSuccess());
-        // setTimeout(()=>dispatch(setSuccess()), 1000);
     }
 
     React.useEffect(
         ()=>{
-            const fetchMusicBanner = async ()=>{
-                isMountedRef.current = true;
-                dispatch(setWaiting(location.pathname));
-                try {
-                    const response: any = await musicApi.getPageLimitLocal(1,4);
-                    const res = await response.data;
-                    if(isMountedRef.current){
-                        // action to progress store 
-                        dispatch(setSuccess());
-        
-                        // set data have been fetched
-                        setData(res);
-                    }
-                }catch(error) {
-                    console.log('error', error);
+            const newData: {id: string, data: any}[] = [];
+            const getDataBanner = async ()=>{
+                await db.collection("music").get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        let item = {
+                            id: doc.id,
+                            data:  doc.data()
+                        }
+                        newData.push(item);
+                    });
+                });
+                if(isMountedRef.current){
+                    // action to progress store 
+                    dispatch(setSuccess());
+    
+                    // set data have been fetched
+                    setData(newData);
                 }
             }
-            fetchMusicBanner();
+            getDataBanner();
+
             return ()=>{
                 isMountedRef.current= false;
             };
-        },[dispatch, location.pathname]
+        },[dispatch, location.pathname, db]
     );
 
     React.useEffect(()=>{
@@ -144,7 +132,6 @@ const Home:React.FC<HomeProps> =() :React.ReactElement => {
                 list={data}
                 fetchMusic={fetchMusic}
             />}
-            
              {/* <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} /> */}
         </Box>
     );

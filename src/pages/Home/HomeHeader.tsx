@@ -148,6 +148,7 @@ const HomeHeader:React.FC<Props> =(props):React.ReactElement => {
                             {isMobile &&  'Hi'+(rememberAccount.email? ', ' : '')}
                             {rememberAccount.email && rememberAccount.name}
                         </Typography>
+                        &nbsp;&nbsp;
                         <Button
                                 className='icon' 
                                 aria-controls="fade-menu" 

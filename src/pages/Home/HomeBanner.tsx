@@ -109,7 +109,7 @@ const CustomSlide: React.FC<{item: any, fetchMusic: (id: string)=>void}> = (prop
       <div {...rests}>
         <Box 
           className='slider-img'
-          style={{backgroundImage: `url(${item.music_baner_url})`}}
+          style={{backgroundImage: `url(${item.data.music_banner_url})`}}
           >
               <Box className='overplay' />
               <Box className='content'>
@@ -117,7 +117,7 @@ const CustomSlide: React.FC<{item: any, fetchMusic: (id: string)=>void}> = (prop
                       <Typography variant='subtitle1'>Trending now</Typography>
                   </Box>
                   <Box >
-                      <Typography variant='h5' >{item.music_name}</Typography>
+                      <Typography variant='h5' >{item.data.music_name}</Typography>
                       <Box mt={1}/>
                       <Typography variant='subtitle1' >Get happy with today's dose of feel-good country songs</Typography>
                   </Box>
@@ -154,7 +154,7 @@ const HomeBanner:React.FC<Props> =(props):React.ReactElement => {
             <Slider {...settings}>
                 {list.map((item, index)=>(
                     <CustomSlide 
-                        key={item.music_id}
+                        key={item.id}
                         fetchMusic={fetchMusic}
                         item={item}
                     />

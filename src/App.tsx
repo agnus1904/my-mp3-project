@@ -14,6 +14,7 @@ import {
 // FireBase
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import "firebase/firestore";
 
 // app
 import { useAppSelector } from 'app/hooks'
@@ -34,9 +35,12 @@ import BottomNavigationApp from 'components/BottomNavigation';
 // Configure Firebase.
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API,
-  authDomain:process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  authDomain:process.env.REACT_APP_FIREBASE_AUTH_DOMAIN+".firebaseapp.com",
+  databaseURL: "https://"+process.env.REACT_APP_FIREBASE_AUTH_DOMAIN+".firebaseapp.com",
+  projectId: 'mymp3-be903',
   // ...
 };
+
 firebase.initializeApp(config);
 
 
@@ -49,7 +53,6 @@ const App: React.FC = ()=>{
 		darkMode ? setAppTheme(createMuiTheme(darkTheme)): setAppTheme(createMuiTheme(lightTheme));
 	},[darkMode]);
 
-
 	// const [isSignedIn, setIsSignedIn] = React.useState(false); // Local signed-in state.
 
 	// Listen to the Firebase Auth state and set the local state.
@@ -60,6 +63,7 @@ const App: React.FC = ()=>{
 			if(!user){
 				return;
 			}
+			
 		});
 		return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
 	  }, []);
